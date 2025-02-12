@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="max-w-6xl p-6 mx-auto mt-10 bg-white rounded-lg shadow-md">
         <h2 class="mb-4 text-2xl font-semibold text-gray-700">
-            Historial de Graduaciones de {{ $user->name }} {{ $user->surname }}
+            Historial de graduaciones de {{ $user->name }} {{ $user->surname }}
         </h2>
 
         <!-- Mensajes de sesión -->
@@ -97,7 +97,7 @@
                                 <span class="ml-2">{{ $registro->esfera ?? 'N/A' }}</span>
                             </div>
                         </div>
-                        <div class="flex flex-wrap gap-2 mt-4">
+                        <div class="flex flex-wrap justify-end gap-2 mt-4">
                             <a href="{{ route('admin.historial.edit', $registro->id) }}" class="w-full">
                                 <x-primary-button class="w-full px-4 py-2 text-sm">
                                     {{ __('Editar') }}

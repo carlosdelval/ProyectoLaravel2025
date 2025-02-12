@@ -15,11 +15,13 @@
             <a href="{{ route('dashboard') }}"><x-application-logo
                     class="block w-auto text-gray-800 fill-current h-9 dark:text-gray-200" /></a>
         </div>
-        <h1 class="text-4xl font-bold text-blue-600">OptiClick</h1>
-        <p class="mt-2 text-gray-600">Tu sistema de gestión de citas ópticas</p>
-        <a href="{{ route('login') }}"
-            class="inline-block px-6 py-3 mt-6 text-white transition bg-blue-500 rounded-lg shadow-md hover:bg-blue-600">
+        <div class="mb-4 text-center">
+            <h1 class="text-4xl font-bold text-blue-600">OptiClick</h1>
+            <p class="mt-2 text-gray-600">Tu sistema de gestión de citas ópticas</p>
+        </div>
+        <a href="{{ route('login') }}" <x-primary-button class="w-full mt-6 bg-blue-600 hover:bg-blue-700">
             Iniciar sesión
+            </x-primary-button>
         </a>
         <p class="mt-4 text-sm text-gray-500">¿No tienes cuenta? <a href="{{ route('register') }}"
                 class="text-blue-500 hover:underline">Regístrate aquí</a></p>

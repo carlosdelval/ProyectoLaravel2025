@@ -45,18 +45,18 @@ Route::delete('/citas/{id}', [CitaController::class, 'destroy'])
     ->middleware('auth')
     ->name('citas.destroy');
 
-Route::middleware('auth')->prefix('admin/citas')->name('admin.citas.')->group(function () {
+Route::middleware(['auth'])->prefix('admin/citas')->name('admin.citas.')->group(function () {
     Route::get('/{cita}/editar', [CitaController::class, 'edit'])->name('edit'); // Formulario de edición
     Route::put('/{cita}', [CitaController::class, 'update'])->name('update'); // Actualizar la cita
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('admin/usuarios', [AdminClientesController::class, 'index'])->name('admin.clientes');
     Route::get('admin/usuarios/{user}/editar', [AdminClientesController::class, 'edit'])->name('admin.usuarios.editar');
     Route::get('admin/usuarios/{user}/historial', [AdminClientesController::class, 'historial'])->name('admin.usuarios.historial');
 });
 
-Route::middleware('auth')->group(function(){
+Route::middleware(['auth'])->group(function(){
     Route::get('admin/historial', [AdminClientesController::class, 'index'])->name('admin.historial');
     Route::get('admin/historial/{historialVista}/borrar', [AdminClientesController::class, 'index'])->name('admin.historial.destroy');
     Route::put('admin/historial/{historialVista}/editar', [AdminClientesController::class, 'index'])->name('admin.historial.edit');

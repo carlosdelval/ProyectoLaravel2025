@@ -11,24 +11,9 @@ class AdminClientesController extends Controller
     /**
      * Muestra la lista de clientes con filtros de búsqueda.
      */
-    public function index(Request $request)
+    public function index()
     {
-        // Filtrar usuarios por nombre, apellidos, teléfono o DNI
-        $query = User::where('role', 'user');
-
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                    ->orWhere('surname', 'like', "%$search%")
-                    ->orWhere('tlf', 'like', "%$search%")
-                    ->orWhere('dni', 'like', "%$search%");
-            });
-        }
-
-        $users = $query->paginate(10);
-
-        return view('admin.clientes', compact('users'));
+        return view('admin.clientes');
     }
 
     public function historial(User $user)
