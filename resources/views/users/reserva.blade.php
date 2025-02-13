@@ -21,10 +21,51 @@
 
             <!-- Hora -->
             <div class="mt-4">
+                <x-input-label for="periodo" :value="__('⏰ Periodo de la cita')" />
+                <select id="periodo" name="periodo" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm" required>
+                    <option value="" selected disabled>Seleccione un periodo</option>
+                    <option value="mañana">Mañana</option>""
+                    <option value="tarde">Tarde</option>
+                </select>
+                <x-input-error :messages="$errors->get('periodo')" class="mt-2" />
+            </div>
+
+            <div class="mt-4" id="hora_mañana" style="display: none;">
+                <x-input-label for="hora_mañana" :value="__('⏰ Hora de la cita (Mañana)')" />
+                <select id="hora_mañana_select" name="hora_mañana" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm">
+                    @for ($i = 10; $i <= 13; $i++)
+                        @for ($j = 0; $j < 60; $j += 20)
+                            <option value="{{ sprintf('%02d:%02d', $i, $j) }}">{{ sprintf('%02d:%02d', $i, $j) }}</option>
+                        @endfor
+                    @endfor
+                </select>
+                <x-input-error :messages="$errors->get('hora_mañana')" class="mt-2" />
+            </div>
+
+            <div class="mt-4" id="hora_tarde" style="display: none;">
+                <x-input-label for="hora_tarde" :value="__('⏰ Hora de la cita (Tarde)')" />
+                <select id="hora_tarde_select" name="hora_tarde" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm">
+                    @for ($i = 17; $i <= 20; $i++)
+                        @for ($j = 0; $j < 60; $j += 20)
+                            <option value="{{ sprintf('%02d:%02d', $i, $j) }}">{{ sprintf('%02d:%02d', $i, $j) }}</option>
+                        @endfor
+                    @endfor
+                </select>
+                <x-input-error :messages="$errors->get('hora_tarde')" class="mt-2" />
+            </div>
+
+            <script>
+                document.getElementById('periodo').addEventListener('change', function() {
+                    var periodo = this.value;
+                    document.getElementById('hora_mañana').style.display = (periodo === 'mañana') ? 'block' : 'none';
+                    document.getElementById('hora_tarde').style.display = (periodo === 'tarde') ? 'block' : 'none';
+                });
+            </script>
+            {{-- <div class="mt-4">
                 <x-input-label for="hora_reserva" :value="__('⏰ Hora de la cita')" />
                 <x-text-input id="hora_reserva" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm" type="time" name="hora_reserva" required />
                 <x-input-error :messages="$errors->get('hora_reserva')" class="mt-2" />
-            </div>
+            </div> --}}
 
             <div class="flex items-center justify-end mt-6">
                 <x-primary-button class="px-6 py-3 text-lg">

@@ -30,12 +30,18 @@ class CitaController extends Controller
     {
         $request->validate([
             'fecha_reserva' => 'required|date|after_or_equal:today',
-            'hora_reserva' => 'required|date_format:H:i',
+            'hora_mañana' => 'required|date_format:H:i',
+            'hora_tarde' => 'required|date_format:H:i',
         ]);
+        if(isset($request->hora_mañana)){
+            $hora_reserva = $request->hora_mañana;
+        }else{
+            $hora_reserva = $request->hora_tarde;
+        }
         Cita::create([
             'user_id' => Auth::id(),
             'fecha' => $request->fecha_reserva,
-            'hora' => $request->hora_reserva,
+            'hora' => $hora_reserva,
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Cita reservada con éxito.');
