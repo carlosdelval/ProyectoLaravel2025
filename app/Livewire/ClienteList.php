@@ -28,6 +28,10 @@ class ClienteList extends Component
         return view('livewire.cliente-list')->with('clientes', $clientes);
     }
 
+    public function deleteUser($userId) {
+        User::find($userId)->delete();
+    }
+
     public function ordenarNombre(){
         $this->campoorden = "name";
         $this->ordenar();

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\HistorialVista;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -65,22 +66,32 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string',
             'surname' => 'required|string',
-            'dni' => 'required|string',
+            'dni' => 'required|string|regex:/^[0-9]{8}[A-Za-z]$/',
             'tlf' => 'required|string',
             'email' => 'required|email',
-            'password' => 'required|string',
+            'password' => 'nullable|string', // Ahora puede estar vacío
         ]);
 
-        $user->name = $request->name;
-        $user->surname = $request->surname;
-        $user->dni = $request->dni;
-        $user->tlf = $request->tlf;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->save();
+        // Construimos el array de datos para actualizar
+        $data = [
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'dni' => $request->dni,
+            'tlf' => $request->tlf,
+            'email' => $request->email,
+        ];
 
-        return redirect()->route('users.index');
+        // Solo actualizar la contraseña si el usuario ingresó una nueva
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        // Actualizamos con un solo update
+        $user->update($data);
+
+        return redirect()->route('admin.clientes')->with('success', 'Usuario actualizado correctamente');
     }
+
 
     public function destroy(User $user)
     {

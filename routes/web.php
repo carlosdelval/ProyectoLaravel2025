@@ -55,13 +55,13 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/usuarios', [AdminClientesController::class, 'index'])->name('admin.clientes');
     Route::get('admin/usuarios/{user}/editar', [AdminClientesController::class, 'edit'])->name('admin.usuarios.editar');
     Route::get('admin/usuarios/{user}/historial', [AdminClientesController::class, 'historial'])->name('admin.usuarios.historial');
+    Route::put('admin/usuarios/{user}/update', [UserController::class, 'update'])->name('admin.usuarios.update');
 });
 
-Route::middleware(['role:admin'])->group(function(){
+Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/historial', [AdminClientesController::class, 'index'])->name('admin.historial');
     Route::delete('admin/historial/{historialVista}/borrar', [HistorialVistaController::class, 'delete'])->name('admin.historial.destroy');
     Route::put('admin/historial/{historialVista}/editar', [HistorialVistaController::class, 'edit'])->name('admin.historial.edit');
-
 });
 
 Route::post('historial/{id}/upload-pdf', [HistorialVistaController::class, 'uploadPdf'])->name('historial.uploadPdf')->middleware(['role:admin']);

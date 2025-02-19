@@ -59,7 +59,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="py-4 text-center text-gray-600">No se encontraró historial.</td>
+                        <td colspan="5" class="py-4 text-center text-gray-600">No se encontró historial.</td>
                     </tr>
                 @endforelse
             </tbody>

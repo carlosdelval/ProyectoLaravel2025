@@ -56,7 +56,7 @@ class CitaController extends Controller
     public function edit($id)
     {
         $cita = Cita::findOrFail($id);
-        return view('admin.editar', compact('cita'));
+        return view('admin.asignar', compact('cita'));
     }
 
     /**

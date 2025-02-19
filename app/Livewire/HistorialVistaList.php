@@ -6,10 +6,11 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HistorialVista;
 use App\Models\User;
+use Livewire\Features\SupportPagination\WithoutUrlPagination;
 
 class HistorialVistaList extends Component
 {
-    use WithPagination;
+    use WithPagination, WithoutUrlPagination;
 
     public $search = '';
     public $direccion = 'asc';

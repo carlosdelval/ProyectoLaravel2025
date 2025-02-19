@@ -23,4 +23,9 @@ class AdminClientesController extends Controller
 
         return view('admin.historial', compact('user', 'historial'));
     }
+
+    public function edit(User $user)
+    {
+        return view('admin.editar', compact('user'));
+    }
 }
