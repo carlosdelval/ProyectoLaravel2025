@@ -33,9 +33,9 @@ class CitaController extends Controller
             'hora_mañana' => 'required|date_format:H:i',
             'hora_tarde' => 'required|date_format:H:i',
         ]);
-        if(isset($request->hora_mañana)){
+        if (isset($request->hora_mañana)) {
             $hora_reserva = $request->hora_mañana;
-        }else{
+        } else {
             $hora_reserva = $request->hora_tarde;
         }
         Cita::create([
@@ -60,30 +60,36 @@ class CitaController extends Controller
     }
 
     /**
-     * Actualiza la información de la cita.
+     * Actualiza la información de la cita o crea una nueva si no existe
      */
     public function update(Request $request, Cita $cita)
-    {
-        $request->validate([
-            'eje' => 'required|numeric',
-            'cilindro' => 'nullable|numeric',
-            'esfera' => 'nullable|numeric'
-        ]);
+{
+    $request->validate([
+        'eje' => 'required|numeric',
+        'cilindro' => 'nullable|numeric',
+        'esfera' => 'nullable|numeric',
+        'revision_pdf' => 'nullable|file|mimes:pdf|max:2048'
+    ]);
 
-        $historial = HistorialVista::where('cita_id', $cita->id)->first();
+    $historial = HistorialVista::firstOrCreate(
+        ['cita_id' => $cita->id],
+        ['user_id' => $cita->user_id, 'eje' => $request->eje, 'cilindro' => $request->cilindro, 'esfera' => $request->esfera]
+    );
 
-        if (!$historial) {
-            return redirect()->route('dashboard')->with('error', 'No se encontró historial para esta cita.');
-        }
-
+    if ($request->hasFile('revision_pdf')) {
+        $filePath = $request->file('revision_pdf')->store('revisiones', 'public');
+        $historial->update(['documentacion' => $filePath]);
+    } else {
         $historial->update([
             'eje' => $request->eje,
             'cilindro' => $request->cilindro,
             'esfera' => $request->esfera
         ]);
-
-        return redirect()->route('dashboard')->with('success', 'Cita actualizada correctamente.');
     }
+
+    return redirect()->route('dashboard')->with('success', 'Cita actualizada correctamente.');
+}
+
 
     public function destroy($id)
     {

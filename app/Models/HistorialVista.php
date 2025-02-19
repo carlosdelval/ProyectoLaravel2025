@@ -18,6 +18,7 @@ class HistorialVista extends Model
         'eje',
         'cilindro',
         'esfera',
+        'documentacion'
     ];
 
     // Relación con el usuario

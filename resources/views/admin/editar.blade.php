@@ -15,34 +15,24 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('admin.citas.update', $cita->id) }}" class="mt-6">
+        <form method="POST" action="{{ route('admin.citas.update', $cita->id) }}" enctype="multipart/form-data" class="mt-6">
             @csrf
             @method('PUT')
 
-            <!-- Eje -->
-            <div>
-                <x-input-label for="eje" :value="__('📏 Eje')" />
-                <x-text-input id="eje" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm" type="number" step="0.01" name="eje" value="{{ $cita->HistorialVista->eje }}" required />
-                <x-input-error :messages="$errors->get('eje')" class="mt-2" />
-            </div>
+            @foreach(['eje' => '📏 Eje', 'cilindro' => '🔵 Cilindro', 'esfera' => '⚫ Esfera'] as $field => $label)
+                <x-input-label for="{{ $field }}" :value="$label" class="mt-4" />
+                <x-text-input id="{{ $field }}" type="number" step="0.1" name="{{ $field }}" class="block w-full mt-1" value="{{ old($field, $cita->historialVista->$field ?? '') }}" required />
+                <x-input-error :messages="$errors->get($field)" class="mt-2" />
+            @endforeach
 
-            <!-- Cilindro -->
-            <div class="mt-4">
-                <x-input-label for="cilindro" :value="__('🔵 Cilindro')" />
-                <x-text-input id="cilindro" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm" type="number" step="0.01" name="cilindro" value="{{ $cita->HistorialVista->cilindro }}" />
-                <x-input-error :messages="$errors->get('cilindro')" class="mt-2" />
-            </div>
-
-            <!-- Esfera -->
-            <div class="mt-4">
-                <x-input-label for="esfera" :value="__('⚫ Esfera')" />
-                <x-text-input id="esfera" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm" type="number" step="0.01" name="esfera" value="{{ $cita->HistorialVista->esfera }}" />
-                <x-input-error :messages="$errors->get('esfera')" class="mt-2" />
-            </div>
+            <!-- Subida de PDF -->
+            <x-input-label for="revision_pdf" value="📂 Subir Informe PDF (Opcional, PDFs existentes se mantendrán)" class="mt-4" />
+            <x-text-input id="revision_pdf" type="file" name="revision_pdf" accept="application/pdf" class="block w-full mt-1" />
+            <x-input-error :messages="$errors->get('revision_pdf')" class="mt-2" />
 
             <div class="flex items-center justify-end mt-6 space-x-4">
                 <x-primary-button>
-                    {{ __('Guardar Cambios') }}
+                    Guardar Cambios
                 </x-primary-button>
             </div>
         </form>

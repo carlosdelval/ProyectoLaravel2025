@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\AdminClientesController;
+use App\Http\Controllers\HistorialVistaController;
 
 
 Route::get('/', function () {
@@ -45,23 +46,28 @@ Route::delete('/citas/{id}', [CitaController::class, 'destroy'])
     ->middleware('auth')
     ->name('citas.destroy');
 
-Route::middleware(['auth'])->prefix('admin/citas')->name('admin.citas.')->group(function () {
+Route::middleware(['role:admin'])->prefix('admin/citas')->name('admin.citas.')->group(function () {
     Route::get('/{cita}/editar', [CitaController::class, 'edit'])->name('edit'); // Formulario de edición
     Route::put('/{cita}', [CitaController::class, 'update'])->name('update'); // Actualizar la cita
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/usuarios', [AdminClientesController::class, 'index'])->name('admin.clientes');
     Route::get('admin/usuarios/{user}/editar', [AdminClientesController::class, 'edit'])->name('admin.usuarios.editar');
     Route::get('admin/usuarios/{user}/historial', [AdminClientesController::class, 'historial'])->name('admin.usuarios.historial');
 });
 
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['role:admin'])->group(function(){
     Route::get('admin/historial', [AdminClientesController::class, 'index'])->name('admin.historial');
-    Route::get('admin/historial/{historialVista}/borrar', [AdminClientesController::class, 'index'])->name('admin.historial.destroy');
-    Route::put('admin/historial/{historialVista}/editar', [AdminClientesController::class, 'index'])->name('admin.historial.edit');
+    Route::delete('admin/historial/{historialVista}/borrar', [HistorialVistaController::class, 'delete'])->name('admin.historial.destroy');
+    Route::put('admin/historial/{historialVista}/editar', [HistorialVistaController::class, 'edit'])->name('admin.historial.edit');
 
 });
+
+Route::post('historial/{id}/upload-pdf', [HistorialVistaController::class, 'uploadPdf'])->name('historial.uploadPdf')->middleware(['role:admin']);
+Route::get('/historial/{id}/descargar', [HistorialVistaController::class, 'descargarPDF'])->name('historial.descargar');
+
+
 
 
 require __DIR__ . '/auth.php';

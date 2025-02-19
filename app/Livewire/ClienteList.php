@@ -4,9 +4,13 @@ namespace App\Livewire;
 
 use App\Models\User;
 use Livewire\Component;
+use Livewire\Features\SupportPagination\WithoutUrlPagination;
+use Livewire\WithPagination;
 
 class ClienteList extends Component
 {
+    use WithPagination, WithoutUrlPagination;
+
     public $nombre;
     public $search;
     public $campoorden = 'id';
@@ -20,7 +24,7 @@ class ClienteList extends Component
                   ->orWhere('surname', 'like', '%' . $this->search . '%')
                   ->orWhere('tlf', 'like', '%' . $this->search . '%')
                   ->orWhere('dni', 'like', '%' . $this->search . '%');
-        })->orderBy($this->campoorden, $this->direccion)->get();
+        })->orderBy($this->campoorden, $this->direccion)->paginate(5);
         return view('livewire.cliente-list')->with('clientes', $clientes);
     }
 
@@ -55,5 +59,10 @@ class ClienteList extends Component
         }else{
             $this->direccion = "asc";
         }
+    }
+
+    //Funcion que nos deja encontrar clientes de las primeras paginas de la paginacion en las siguientes
+    public function updatingSearch(){
+        $this->resetPage();
     }
 }

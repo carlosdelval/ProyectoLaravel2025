@@ -63,11 +63,13 @@
                                             </x-danger-button>
                                         </form>
                                     @elseif (Auth::user()->role == 'admin')
-                                        <form action="{{ route('admin.citas.edit', $cita->id) }}" method="GET">
-                                            <x-primary-button class="px-4 py-2 text-sm">
-                                                {{ __('Editar') }}
-                                            </x-primary-button>
-                                        </form>
+                                        <div class="flex">
+                                            <form action="{{ route('admin.citas.edit', $cita->id) }}" method="GET">
+                                                <x-primary-button class="px-4 py-2 text-sm">
+                                                    {{ __('Asignar graduación') }}
+                                                </x-primary-button>
+                                            </form>
+                                        </div>
                                     @endif
                                 </td>
                             </tr>
@@ -124,7 +126,7 @@
                                 @elseif (Auth::user()->role == 'admin')
                                     <form action="{{ route('admin.citas.edit', $cita->id) }}" method="GET">
                                         <x-primary-button class="w-full px-4 py-2 text-sm">
-                                            {{ __('Editar') }}
+                                            {{ __('Asignar graduación') }}
                                         </x-primary-button>
                                     </form>
                                 @endif

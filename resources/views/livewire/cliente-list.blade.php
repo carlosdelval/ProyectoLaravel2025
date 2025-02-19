@@ -113,9 +113,9 @@
             </div>
         @endforelse
     </div>
-
-    <!-- Paginación -->
-    {{-- <div class="mt-4">
-        {{ $clientes->links() }}
-    </div> --}}
+    @if ($clientes->hasPages())
+        <div class="mt-4">
+            {{ $clientes->links() }}
+        </div>
+    @endif
 </div>
