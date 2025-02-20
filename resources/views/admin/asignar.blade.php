@@ -21,7 +21,7 @@
 
             @foreach(['eje' => '📏 Eje', 'cilindro' => '🔵 Cilindro', 'esfera' => '⚫ Esfera'] as $field => $label)
                 <x-input-label for="{{ $field }}" :value="$label" class="mt-4" />
-                <x-text-input id="{{ $field }}" type="number" step="0.1" name="{{ $field }}" class="block w-full mt-1" value="{{ old($field, $cita->historialVista->$field ?? '') }}" required />
+                <x-text-input id="{{ $field }}" type="number" step="0.01" name="{{ $field }}" class="block w-full mt-1" value="{{ old($field, $cita->historialVista->$field ?? '') }}" required />
                 <x-input-error :messages="$errors->get($field)" class="mt-2" />
             @endforeach
 

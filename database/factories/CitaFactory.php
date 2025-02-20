@@ -15,7 +15,8 @@ class CitaFactory extends Factory
         return [
             'user_id' => User::factory(),
             'fecha' => $this->faker->dateTimeBetween('now', '+1 year'),
-            'hora' => $this->faker->time()
+            'hora' => $this->faker->time(),
+            'graduada' => 0
         ];
     }
 }

@@ -7,4 +7,5 @@
             </div>
         @endif
         @livewire('cliente-list')
+    </div>
 </x-app-layout>

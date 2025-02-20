@@ -13,6 +13,7 @@ class Cita extends Model
         'user_id',
         'fecha',
         'hora',
+        'graduada'
     ];
 
     public function user()

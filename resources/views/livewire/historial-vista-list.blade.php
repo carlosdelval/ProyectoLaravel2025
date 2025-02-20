@@ -36,24 +36,31 @@
                         <td>
                             <div class="flex flex-wrap justify-end gap-2">
                                 <a href="{{ route('historial.descargar', $registro->id) }}">
-                                    <x-primary-button class="px-3 py-2 my-2 text-xs">
-                                        <svg class="w-4 h-4 text-white-800 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 18">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M8 1v11m0 0 4-4m-4 4L4 8m11 4v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3" />
-                                        </svg>
-                                    </x-primary-button>
+                                    <x-secondary-button class="px-3 py-2 my-2 text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd"
+                                                    d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z"
+                                                    clip-rule="evenodd" />
+                                                <path fill-rule="evenodd"
+                                                    d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </x-secondary-button>
                                 </a>
-                                <x-danger-button class="px-3 py-2 my-2 text-xs"
-                                    wire:click="deleteHistorial({{ $registro->id }})"
-                                    wire:confirm="¿Estás seguro de que deseas eliminar el registro?">
-                                    <svg class="w-4 h-4 text-white-800 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                        <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 8v1h4V8m4 7H4a1 1 0 0 1-1-1V5h14v9a1 1 0 0 1-1 1ZM2 1h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Z" />
-                                    </svg>
-                                </x-danger-button>
+                                @if (Auth::user()->role === 'admin')
+                                    <x-danger-button class="px-3 py-2 my-2 text-xs"
+                                        wire:click="deleteHistorial({{ $registro->id }})"
+                                        wire:confirm="¿Estás seguro de que deseas eliminar el registro?">
+                                        <svg class="w-4 h-4 text-white-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                            <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 8v1h4V8m4 7H4a1 1 0 0 1-1-1V5h14v9a1 1 0 0 1-1 1ZM2 1h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Z" />
+                                        </svg>
+                                    </x-danger-button>
+                                @endif
                             </div>
                         </td>
                     </tr>
