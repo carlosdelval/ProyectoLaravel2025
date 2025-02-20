@@ -1,32 +1,24 @@
 <x-app-layout>
     <div class="max-w-6xl p-6 mx-auto mt-10 bg-white shadow-lg rounded-2xl">
-        <!-- Mensaje de bienvenida -->
-        <h1 class="text-4xl font-extrabold text-blue-600">Bienvenido, {{ Auth::user()->name }} 👋</h1>
-        @if (Auth::user()->role == 'user')
-            <p class="mt-2 text-lg text-gray-600">Aquí puedes gestionar tus citas y datos personales.</p>
-        @elseif (Auth::user()->role == 'admin')
-            <p class="mt-2 text-lg text-gray-600">Aquí puedes gestionar las citas y datos de tus clientes.</p>
-        @endif
-
-        <!-- Mensajes de éxito/error -->
-        @if (session('success'))
-            <div class="p-3 mt-4 text-green-800 bg-green-100 border-l-4 border-green-500 rounded-md">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="p-3 mt-4 text-red-800 bg-red-100 border-l-4 border-red-500 rounded-md">
-                {{ session('error') }}
-            </div>
-        @endif
-
         <!-- Tabla de citas -->
-        <div class="mt-8">
+        <div class="">
             @if (Auth::user()->role == 'user')
                 <h2 class="text-2xl font-semibold text-gray-700">📅 Tus citas actuales</h2>
             @elseif (Auth::user()->role == 'admin')
                 <h2 class="text-2xl font-semibold text-gray-700">📅 Citas programadas</h2>
+            @endif
+
+            <!-- Mensajes de éxito/error -->
+            @if (session('success'))
+                <div class="p-3 mt-2 text-green-800 bg-green-100 border-l-4 border-green-500 rounded-md">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="p-3 mt-2 text-red-800 bg-red-100 border-l-4 border-red-500 rounded-md">
+                    {{ session('error') }}
+                </div>
             @endif
 
             <!-- Versión Escritorio (Tabla) -->
@@ -161,9 +153,8 @@
                                         <x-danger-button class="px-4 py-2 text-sm">
                                             <div class="flex items-center gap-2">
                                                 Anular<svg class="w-4 h-4 text-white-800 dark:text-gray"
-                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                    width="24" height="24" fill="currentColor"
-                                                    viewBox="0 0 24 24">
+                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24" fill="currentColor" viewBox="0 0 24 24">
                                                     <path fill-rule="evenodd"
                                                         d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
                                                         clip-rule="evenodd" />
