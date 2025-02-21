@@ -1,7 +1,21 @@
 <div>
-    <!-- Barra de búsqueda liveware por Nombre,Apellido,Tlf o DNI  -->
-    <input type="text" wire:model.live="search" class="w-full px-4 py-2 border rounded-lg md:w-96"
-        placeholder="Buscar por nombre, apellidos, teléfono o DNI" />
+    <div class="flex flex-col md:flex-row">
+        <div class="flex gap-2 mb-2">
+            <animated-icons
+                src="https://animatedicons.co/get-icon?name=user%20profile&style=minimalistic&token=d085a379-5ce3-4078-bcef-6b3a19fa1d4f"
+                trigger="hover"
+                attributes='{"variationThumbColour":"#536DFE","variationName":"Two Tone","variationNumber":2,"numberOfGroups":2,"backgroundIsGroup":false,"strokeWidth":1,"defaultColours":{"group-1":"#000000","group-2":"#536DFE","background":"#FFFFFF"}}'
+                height="60" width="60"></animated-icons>
+            <h2 class="mt-4 text-2xl font-semibold text-gray-700">
+                Gestión de clientes
+            </h2>
+        </div>
+        <!-- Barra de búsqueda liveware por Nombre,Apellido,Tlf o DNI  -->
+        <div class="mt-3 md:ml-auto">
+            <input type="text" wire:model.live="search" class="w-full px-4 py-2 border rounded-lg md:w-96"
+                placeholder="Buscar por nombre, apellidos, teléfono o DNI" />
+        </div>
+    </div>
     <div class="hidden mt-4 overflow-x-auto rounded-lg shadow-md bg-gray-50 md:block">
         <table class="w-full border-collapse min-w-[600px]">
             <thead>
@@ -83,7 +97,6 @@
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                     </svg>
-
                                 </x-danger-button>
                             </div>
                         </td>
@@ -160,7 +173,6 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                 </svg>
-
                             </x-danger-button>
                         </div>
                     </div>

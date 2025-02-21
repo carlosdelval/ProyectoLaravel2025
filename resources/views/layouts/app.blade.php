@@ -11,8 +11,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
+    <script src="https://animatedicons.co/scripts/embed-animated-icons.js"></script>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -36,7 +35,6 @@
             {{ $slot }}
         </main>
     </div>
-    @fluxScripts
 </body>
 
 </html>

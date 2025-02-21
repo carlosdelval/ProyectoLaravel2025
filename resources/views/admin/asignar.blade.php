@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-2xl p-6 mx-auto mt-10 bg-white shadow-lg rounded-2xl">
+    <div class="max-w-2xl p-6 mx-auto mt-4 bg-white shadow-lg rounded-2xl">
         <h2 class="mb-4 text-3xl font-extrabold text-blue-600">✏️ Asignar graduación</h2>
         <p class="text-gray-600">Modifica los datos de la graduación vinculada a esta cita.</p>
         <div class="p-4 my-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400"

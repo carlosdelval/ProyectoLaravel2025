@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-4xl p-6 mx-auto mt-10 bg-white rounded-lg shadow-md">
+    <div class="max-w-4xl p-6 mx-auto mt-4 bg-white rounded-lg shadow-md">
         <h2 class="mb-4 text-2xl font-bold text-gray-800">Editar Usuario</h2>
 
         @if (session('success'))
