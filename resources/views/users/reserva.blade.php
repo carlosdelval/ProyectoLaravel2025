@@ -27,6 +27,19 @@
                 <x-input-error :messages="$errors->get('fecha_reserva')" class="mt-2" />
             </div>
 
+            {{-- Opticas --}}
+
+            <div class="mt-4">
+                <x-input-label for="optica" :value="__('👓 Centro')" />
+                <select id="optica" name="optica" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm"
+                    required>
+                    <option value="" selected disabled>Seleccione una óptica</option>
+                    @foreach ($opticas as $optica)
+                        <option value="{{ $optica->id }}">{{ $optica->nombre }} -- {{ $optica->direccion }}</option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('optica')" class="mt-2" />
+            </div>
             <!-- Hora -->
             <div class="mt-4">
                 <x-input-label for="periodo" :value="__('⏰ Periodo de la cita')" />

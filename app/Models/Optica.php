@@ -12,9 +12,9 @@ class Optica extends Model
 
     protected $fillable = ['nombre', 'direccion', 'telefono'];
 
-    public function users()
+    public function citas()
     {
-        return $this->belongsToMany(User::class, 'optica_user')->withTimestamps();
+        return $this->belongsToMany(Cita::class, 'optica_cita')->withTimestamps();
     }
 
 

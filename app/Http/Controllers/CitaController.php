@@ -8,31 +8,26 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\HistorialVista;
 use App\Notifications\CitaConfirmadaNotification;
 use Carbon\Carbon;
+use App\Models\Optica;
 
 class CitaController extends Controller
 {
     public function index()
     {
+        $opticas = Optica::all();
         if (Auth::user()->role === 'admin') {
             $citas = Cita::where('graduada', 0)->orderBy('fecha', 'asc')->orderBy('hora', 'asc')->get();
-            $citasSemana = $citas->filter(function ($cita) {
-                $fechaCita = Carbon::parse($cita->fecha);
-                return $fechaCita->isSameWeek(Carbon::now());
-            });
         } else {
             $citas = Cita::where('user_id', Auth::id())->where('graduada', 0)->orderBy('fecha', 'asc')->get();
-            $citasSemana = $citas->filter(function ($cita) {
-                $fechaCita = Carbon::parse($cita->fecha);
-                return $fechaCita->isSameWeek(Carbon::now());
-            });
         }
-        return view('dashboard', compact('citas', 'citasSemana'));
+        return view('dashboard', compact('citas', 'opticas'));
     }
 
-    // Muestra el formulario para reservar una cita, mandando las citas que ya están ocupadas pa gestionarlas con el select de horas
+    // Muestra el formulario para reservar una cita, mandando un array con todas las opticas disponibles
     public function create()
     {
-        return view('users.reserva');
+        $opticas = Optica::all();
+        return view('users.reserva')->with('opticas', $opticas);
     }
 
     // Guarda la cita en la BD
@@ -43,14 +38,18 @@ class CitaController extends Controller
             'periodo' => 'required|in:mañana,tarde',
             'hora_mañana' => 'nullable|required_if:periodo,mañana|date_format:H:i',
             'hora_tarde' => 'nullable|required_if:periodo,tarde|date_format:H:i',
+            'optica' => 'required|exists:opticas,id'
         ]);
 
         // Seleccionar la hora según el periodo
         $hora = ($request->periodo === 'mañana') ? $request->hora_mañana : $request->hora_tarde;
 
-        // Comprobar si ya existe una cita en esa fecha y hora
+        // Comprobar si ya existe una cita en esa fecha y hora en la optica elegida
         $citaExistente = Cita::where('fecha', $request->fecha_reserva)
             ->where('hora', $hora)
+            ->whereHas('opticas', function ($query) use ($request) {
+                $query->where('optica_id', $request->optica);
+            })
             ->exists();
 
         if ($citaExistente) {
@@ -63,6 +62,10 @@ class CitaController extends Controller
             'fecha' => $request->fecha_reserva,
             'hora' => $hora
         ]);
+
+        // Crear insert en la tabla optica_cita
+        $optica = Optica::findOrFail($request->optica);
+        $optica->citas()->attach(Cita::latest()->first()->id);
 
         return redirect()->route('dashboard')->with('success', 'Cita reservada con éxito.');
     }

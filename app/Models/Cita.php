@@ -13,7 +13,8 @@ class Cita extends Model
         'user_id',
         'fecha',
         'hora',
-        'graduada'
+        'graduada',
+        'optica_id'
     ];
 
     public function user()
@@ -24,5 +25,10 @@ class Cita extends Model
     public function historialVista()
     {
         return $this->hasOne(HistorialVista::class);
+    }
+
+    public function opticas()
+    {
+        return $this->belongsTo(Optica::class, 'optica_cita')->withTimestamps();
     }
 }

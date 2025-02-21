@@ -59,10 +59,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Cita::class);
     }
-
-    public function opticas()
-{
-    return $this->belongsToMany(Optica::class, 'optica_user')->withTimestamps();
-}
-
 }

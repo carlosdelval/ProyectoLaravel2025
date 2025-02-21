@@ -3,7 +3,7 @@
         <!-- Tabla de citas -->
         <div class="">
             @if (Auth::user()->role == 'user')
-                <h2 class="text-2xl font-semibold text-gray-700">📅 Tus citas actuales</h2>
+                <h2 class="text-2xl font-semibold text-gray-700">⏰ Tus citas actuales, {{ Auth::user()->name }}</h2>
             @elseif (Auth::user()->role == 'admin')
                 <h2 class="text-2xl font-semibold text-gray-700">📅 Citas programadas</h2>
             @endif
@@ -28,9 +28,12 @@
                         <tr class="text-gray-700 bg-blue-100">
                             <th class="px-6 py-3 text-left">Fecha</th>
                             <th class="px-6 py-3 text-left">Hora</th>
+                            <th class="px-6 py-3 text-left">Centro</th>
                             @if (Auth::user()->role == 'admin')
                                 <th class="px-6 py-3 text-left">Cliente</th>
                                 <th class="px-6 py-3 text-left">Tlf</th>
+                            @else
+                                <th class="px-6 py-3 text-left">Dirección</th>
                             @endif
                             <th class="px-6 py-3 text-center"></th>
                         </tr>
@@ -40,9 +43,12 @@
                             <tr class="transition-all hover:bg-gray-100">
                                 <td class="px-6 py-4">{{ \Carbon\Carbon::parse($cita->fecha)->format('d-m-Y') }}</td>
                                 <td class="px-6 py-4">{{ $cita->hora }}</td>
+                                <td class="px-6 py-4">{{ $cita->opticas->first()->nombre ?? '-' }}</td>
                                 @if (Auth::user()->role == 'admin')
                                     <td class="px-6 py-4">{{ $cita->user->name . ' ' . $cita->user->surname }}</td>
                                     <td class="px-6 py-4">{{ $cita->user->tlf }}</td>
+                                @else
+                                    <td class="px-6 py-4">{{ $cita->opticas->first()->direccion ?? '-' }}</td>
                                 @endif
                                 <td class="justify-end px-6 py-4 text-right">
                                     @if (Auth::user()->role == 'user')
@@ -52,13 +58,11 @@
                                             @method('DELETE')
                                             <x-danger-button class="px-4 py-2 text-sm">
                                                 <div class="flex items-center gap-2">
-                                                    Anular<svg class="w-4 h-4 text-white-800 dark:text-gray"
-                                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                        width="24" height="24" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path fill-rule="evenodd"
-                                                            d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
-                                                            clip-rule="evenodd" />
+                                                    Anular<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="size-4">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
                                                     </svg>
                                                 </div>
                                             </x-danger-button>
@@ -68,7 +72,7 @@
                                             <form action="{{ route('admin.citas.edit', $cita->id) }}" method="GET">
                                                 <x-primary-button class="px-4 py-2 text-sm">
                                                     <div class="flex items-center gap-2">
-                                                        Graduar<svg class="w-4 h-4 text-white-800 dark:text-dark"
+                                                        <svg class="w-4 h-4 text-white-800 dark:text-dark"
                                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                             width="24" height="24" fill="none"
                                                             viewBox="0 0 24 24">
@@ -86,13 +90,11 @@
                                                 @method('DELETE')
                                                 <x-danger-button class="px-4 py-2 text-sm">
                                                     <div class="flex items-center gap-2">
-                                                        Anular<svg class="w-4 h-4 text-white-800 dark:text-gray"
-                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24" fill="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path fill-rule="evenodd"
-                                                                d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
-                                                                clip-rule="evenodd" />
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="size-4">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
                                                         </svg>
                                                     </div>
                                                 </x-danger-button>
@@ -120,7 +122,22 @@
                             <div>
                                 <span
                                     class="font-medium">{{ \Carbon\Carbon::parse($cita->fecha)->format('d-m-Y') }}</span>
-                                <span class="ml-2 text-gray-600">{{ $cita->hora }}</span>
+                                <div class="flex my-2">
+                                    <span
+                                        class=" bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                        <div class="flex">
+                                            <svg class="w-2.5 h-2.5 me-1.5 mt-1" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                                            </svg>
+                                            {{ $cita->hora }}
+                                        </div>
+                                    </span>
+                                </div>
+                                <p class="text-gray-600 ">{{ $cita->opticas->first()->nombre ?? '-' }}</p>
+                                <p class="text-gray-600 ">{{ $cita->opticas->first()->direccion ?? '-' }}</p>
                             </div>
                             <svg class="w-5 h-5 transition-transform transform"
                                 :class="{ 'rotate-180': open === {{ $loop->index }} }" fill="none"
@@ -152,12 +169,11 @@
                                         @method('DELETE')
                                         <x-danger-button class="px-4 py-2 text-sm">
                                             <div class="flex items-center gap-2">
-                                                Anular<svg class="w-4 h-4 text-white-800 dark:text-gray"
-                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path fill-rule="evenodd"
-                                                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
-                                                        clip-rule="evenodd" />
+                                                Anular<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-4">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
                                                 </svg>
                                             </div>
                                         </x-danger-button>
@@ -185,13 +201,11 @@
                                             @method('DELETE')
                                             <x-danger-button class="px-4 py-2 text-sm">
                                                 <div class="flex items-center gap-2">
-                                                    Anular<svg class="w-4 h-4 text-white-800 dark:text-gray"
-                                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                        width="24" height="24" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path fill-rule="evenodd"
-                                                            d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
-                                                            clip-rule="evenodd" />
+                                                    Anular<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="size-4">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
                                                     </svg>
                                                 </div>
                                             </x-danger-button>
