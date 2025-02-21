@@ -23,42 +23,43 @@
             <div>
                 <x-input-label for="fecha_reserva" :value="__('📆 Fecha de la cita')" />
                 <x-text-input id="fecha_reserva" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm"
-                    type="date" name="fecha_reserva" required />
+                    type="date" name="fecha_reserva" value="{{ old('fecha_reserva') }}" required />
                 <x-input-error :messages="$errors->get('fecha_reserva')" class="mt-2" />
             </div>
 
-            {{-- Opticas --}}
-
+            <!-- Ópticas -->
             <div class="mt-4">
                 <x-input-label for="optica" :value="__('👓 Centro')" />
-                <select id="optica" name="optica" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm"
-                    required>
-                    <option value="" selected disabled>Seleccione una óptica</option>
+                <select id="optica" name="optica" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm" required>
+                    <option value="" disabled {{ old('optica') ? '' : 'selected' }}>Seleccione una óptica</option>
                     @foreach ($opticas as $optica)
-                        <option value="{{ $optica->id }}">{{ $optica->nombre }} -- {{ $optica->direccion }}</option>
+                        <option value="{{ $optica->id }}" {{ old('optica') == $optica->id ? 'selected' : '' }}>
+                            {{ $optica->nombre }} -- {{ $optica->direccion }}
+                        </option>
                     @endforeach
                 </select>
                 <x-input-error :messages="$errors->get('optica')" class="mt-2" />
             </div>
-            <!-- Hora -->
+
+            <!-- Periodo -->
             <div class="mt-4">
                 <x-input-label for="periodo" :value="__('⏰ Periodo de la cita')" />
-                <select id="periodo" name="periodo" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm"
-                    required>
-                    <option value="" selected disabled>Seleccione un periodo</option>
-                    <option value="mañana">Mañana</option>""
-                    <option value="tarde">Tarde</option>
+                <select id="periodo" name="periodo" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm" required>
+                    <option value="" disabled {{ old('periodo') ? '' : 'selected' }}>Seleccione un periodo</option>
+                    <option value="mañana" {{ old('periodo') == 'mañana' ? 'selected' : '' }}>Mañana</option>
+                    <option value="tarde" {{ old('periodo') == 'tarde' ? 'selected' : '' }}>Tarde</option>
                 </select>
                 <x-input-error :messages="$errors->get('periodo')" class="mt-2" />
             </div>
 
+            <!-- Hora Mañana -->
             <div class="mt-4" id="hora_mañana" style="display: none;">
                 <x-input-label for="hora_mañana" :value="__('⏰ Hora de la cita (Mañana)')" />
-                <select id="hora_mañana_select" name="hora_mañana"
-                    class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm">
+                <select id="hora_mañana_select" name="hora_mañana" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm">
                     @for ($i = 10; $i <= 13; $i++)
                         @for ($j = 0; $j < 60; $j += 20)
-                            <option value="{{ sprintf('%02d:%02d', $i, $j) }}">{{ sprintf('%02d:%02d', $i, $j) }}
+                            <option value="{{ sprintf('%02d:%02d', $i, $j) }}" {{ old('hora_mañana') == sprintf('%02d:%02d', $i, $j) ? 'selected' : '' }}>
+                                {{ sprintf('%02d:%02d', $i, $j) }}
                             </option>
                         @endfor
                     @endfor
@@ -66,13 +67,14 @@
                 <x-input-error :messages="$errors->get('hora_mañana')" class="mt-2" />
             </div>
 
+            <!-- Hora Tarde -->
             <div class="mt-4" id="hora_tarde" style="display: none;">
                 <x-input-label for="hora_tarde" :value="__('⏰ Hora de la cita (Tarde)')" />
-                <select id="hora_tarde_select" name="hora_tarde"
-                    class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm">
+                <select id="hora_tarde_select" name="hora_tarde" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm">
                     @for ($i = 17; $i <= 20; $i++)
                         @for ($j = 0; $j < 60; $j += 20)
-                            <option value="{{ sprintf('%02d:%02d', $i, $j) }}">{{ sprintf('%02d:%02d', $i, $j) }}
+                            <option value="{{ sprintf('%02d:%02d', $i, $j) }}" {{ old('hora_tarde') == sprintf('%02d:%02d', $i, $j) ? 'selected' : '' }}>
+                                {{ sprintf('%02d:%02d', $i, $j) }}
                             </option>
                         @endfor
                     @endfor
@@ -80,12 +82,21 @@
                 <x-input-error :messages="$errors->get('hora_tarde')" class="mt-2" />
             </div>
 
+            <!-- Script para mostrar la hora según el periodo -->
             <script>
-                //Script que cambia entre tarde y mañana
-                document.getElementById('periodo').addEventListener('change', function() {
-                    var periodo = this.value;
-                    document.getElementById('hora_mañana').style.display = (periodo === 'mañana') ? 'block' : 'none';
-                    document.getElementById('hora_tarde').style.display = (periodo === 'tarde') ? 'block' : 'none';
+                document.addEventListener('DOMContentLoaded', function () {
+                    let periodo = document.getElementById('periodo');
+                    let horaMañana = document.getElementById('hora_mañana');
+                    let horaTarde = document.getElementById('hora_tarde');
+
+                    function toggleHoras() {
+                        let selected = periodo.value;
+                        horaMañana.style.display = (selected === 'mañana') ? 'block' : 'none';
+                        horaTarde.style.display = (selected === 'tarde') ? 'block' : 'none';
+                    }
+
+                    periodo.addEventListener('change', toggleHoras);
+                    toggleHoras(); // Mantener selección si hay errores de validación
                 });
             </script>
 

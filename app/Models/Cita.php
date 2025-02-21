@@ -3,18 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Cita extends Model
 {
+    use HasFactory;
     protected $table = 'citas';
 
     protected $fillable = [
         'id',
         'user_id',
+        'optica_id',
         'fecha',
         'hora',
-        'graduada',
-        'optica_id'
+        'graduada'
     ];
 
     public function user()
@@ -27,8 +29,8 @@ class Cita extends Model
         return $this->hasOne(HistorialVista::class);
     }
 
-    public function opticas()
+    public function optica()
     {
-        return $this->belongsTo(Optica::class, 'optica_cita')->withTimestamps();
+        return $this->belongsTo(Optica::class);
     }
 }

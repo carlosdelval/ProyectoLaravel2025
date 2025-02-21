@@ -43,12 +43,12 @@
                             <tr class="transition-all hover:bg-gray-100">
                                 <td class="px-6 py-4">{{ \Carbon\Carbon::parse($cita->fecha)->format('d-m-Y') }}</td>
                                 <td class="px-6 py-4">{{ $cita->hora }}</td>
-                                <td class="px-6 py-4">{{ $cita->opticas->first()->nombre ?? '-' }}</td>
+                                <td class="px-6 py-4">{{ $cita->optica->nombre}}</td>
                                 @if (Auth::user()->role == 'admin')
                                     <td class="px-6 py-4">{{ $cita->user->name . ' ' . $cita->user->surname }}</td>
                                     <td class="px-6 py-4">{{ $cita->user->tlf }}</td>
                                 @else
-                                    <td class="px-6 py-4">{{ $cita->opticas->first()->direccion ?? '-' }}</td>
+                                    <td class="px-6 py-4">{{ $cita->optica->direccion}}</td>
                                 @endif
                                 <td class="justify-end px-6 py-4 text-right">
                                     @if (Auth::user()->role == 'user')
@@ -136,8 +136,8 @@
                                         </div>
                                     </span>
                                 </div>
-                                <p class="text-gray-600 ">{{ $cita->opticas->first()->nombre ?? '-' }}</p>
-                                <p class="text-gray-600 ">{{ $cita->opticas->first()->direccion ?? '-' }}</p>
+                                <p class="text-gray-600 ">{{ $cita->optica->nombre}}</p>
+                                <p class="text-gray-600 ">{{ $cita->optica->direccion}}</p>
                             </div>
                             <svg class="w-5 h-5 transition-transform transform"
                                 :class="{ 'rotate-180': open === {{ $loop->index }} }" fill="none"

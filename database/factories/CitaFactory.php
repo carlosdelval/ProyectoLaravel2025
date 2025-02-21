@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Cita;
 use App\Models\User;
+use App\Models\Optica;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CitaFactory extends Factory
@@ -13,11 +14,11 @@ class CitaFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'fecha' => $this->faker->dateTimeBetween('now', '+1 year'),
-            'hora' => $this->faker->time(),
-            'graduada' => 0,
-            'optica_id' => random_int(1,2)
+            'user_id'   => User::all()->random()->id,
+            'optica_id' => Optica::all()->random()->id,
+            'fecha'     => $this->faker->dateTimeBetween('+1 week', '+6 months'),
+            'hora'      => $this->faker->time(),
+            'graduada'  => 0
         ];
     }
 }

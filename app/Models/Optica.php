@@ -14,8 +14,12 @@ class Optica extends Model
 
     public function citas()
     {
-        return $this->belongsToMany(Cita::class, 'optica_cita')->withTimestamps();
+        return $this->hasMany(Cita::class);
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'optica_user')->withTimestamps();
+    }
 
 }

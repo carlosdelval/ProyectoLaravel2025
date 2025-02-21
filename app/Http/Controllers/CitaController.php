@@ -9,6 +9,7 @@ use App\Models\HistorialVista;
 use App\Notifications\CitaConfirmadaNotification;
 use Carbon\Carbon;
 use App\Models\Optica;
+use Illuminate\Support\Facades\DB;
 
 class CitaController extends Controller
 {
@@ -47,27 +48,23 @@ class CitaController extends Controller
         // Comprobar si ya existe una cita en esa fecha y hora en la optica elegida
         $citaExistente = Cita::where('fecha', $request->fecha_reserva)
             ->where('hora', $hora)
-            ->whereHas('opticas', function ($query) use ($request) {
-                $query->where('optica_id', $request->optica);
-            })
+            ->where('optica_id', $request->optica)
             ->exists();
 
         if ($citaExistente) {
             return redirect()->route('user.reserva')->with('error', 'Ya existe una cita en esa fecha y hora. Por favor, selecciona otra fecha u hora distinta.');
+        } else {
+            // Crear la cita
+            Cita::create([
+                'user_id' => Auth::id(),
+                'fecha' => $request->fecha_reserva,
+                'hora' => $hora,
+                'optica_id' => $request->optica
+            ]);
+
+
+            return redirect()->route('dashboard')->with('success', 'Cita reservada con éxito.');
         }
-
-        // Crear la cita
-        Cita::create([
-            'user_id' => Auth::id(),
-            'fecha' => $request->fecha_reserva,
-            'hora' => $hora
-        ]);
-
-        // Crear insert en la tabla optica_cita
-        $optica = Optica::findOrFail($request->optica);
-        $optica->citas()->attach(Cita::latest()->first()->id);
-
-        return redirect()->route('dashboard')->with('success', 'Cita reservada con éxito.');
     }
 
 
@@ -132,5 +129,21 @@ class CitaController extends Controller
     {
         $cita = Cita::findOrFail($id);
         $cita->update(['graduada' => 1]);
+
+        // Verificar si el usuario ya está registrado como cliente de la óptica
+        $existeRelacion = DB::table('optica_user')
+            ->where('user_id', $cita->user_id)
+            ->where('optica_id', $cita->optica_id)
+            ->exists();
+
+        // Si no existe la relación, la creamos
+        if (!$existeRelacion) {
+            DB::table('optica_user')->insert([
+                'user_id' => $cita->user_id,
+                'optica_id' => $cita->optica_id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
     }
 }

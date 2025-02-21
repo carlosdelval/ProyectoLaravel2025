@@ -16,6 +16,7 @@ return new class extends Migration
             $table->decimal('eje');
             $table->decimal('cilindro');
             $table->decimal('esfera');
+            $table->string('documentacion')->nullable();
             $table->softDeletes(); // Para borrar lógicamente
             $table->timestamps(); // Para registrar cuándo se añadió cada dato
         });

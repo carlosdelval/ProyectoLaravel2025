@@ -2,24 +2,19 @@
 
 namespace Database\Factories;
 
+use App\Models\Optica;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Optica>
- */
 class OpticaFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Optica::class;
+
     public function definition(): array
     {
         return [
-            'nombre' => $this->faker->company,
+            'nombre'    => $this->faker->company . ' Óptica',
             'direccion' => $this->faker->address,
-            'telefono' => $this->faker->phoneNumber,
+            'telefono'  => $this->faker->phoneNumber,
         ];
     }
 }

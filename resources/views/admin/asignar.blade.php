@@ -8,7 +8,7 @@
                 <span class="font-medium">{{ $cita->user->name }} {{ $cita->user->surname }}
             </div>
             <div class="mt-2">
-                <span class="font-medium">{{ $cita->opticas->first()->nombre ?? '-' }}</span>
+                <span class="font-medium">{{ $cita->optica->nombre}}</span>
             </div>
             <div class="mt-2">
                 <span class="font-medium">Fecha: {{ \Carbon\Carbon::parse($cita->fecha)->format('d-m-Y') }}
