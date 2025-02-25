@@ -15,13 +15,7 @@ class CitaController extends Controller
 {
     public function index()
     {
-        $opticas = Optica::all();
-        if (Auth::user()->role === 'admin') {
-            $citas = Cita::where('graduada', 0)->orderBy('fecha', 'asc')->orderBy('hora', 'asc')->get();
-        } else {
-            $citas = Cita::where('user_id', Auth::id())->where('graduada', 0)->orderBy('fecha', 'asc')->get();
-        }
-        return view('dashboard', compact('citas', 'opticas'));
+        return view('dashboard');
     }
 
     // Muestra el formulario para reservar una cita, mandando un array con todas las opticas disponibles
@@ -117,7 +111,7 @@ class CitaController extends Controller
         $cita = Cita::findOrFail($id);
 
         // Verifica que la cita pertenece al usuario logeado o eres admin
-        if ($cita->user_id === Auth::id() || Auth::role() === 'admin') {
+        if ($cita->user_id === Auth::id() || Auth::user()->role === 'admin') {
             $cita->delete();
             return redirect()->route('dashboard')->with('success', 'Cita anulada con éxito.');
         } else {

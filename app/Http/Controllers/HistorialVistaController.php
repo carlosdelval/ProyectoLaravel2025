@@ -41,4 +41,11 @@ class HistorialVistaController extends Controller
         $historial = HistorialVista::findOrFail($id);
         return view('admin.historial.edit', compact('historial'));
     }
+
+    public function destroy($id)
+    {
+        $historial = HistorialVista::findOrFail($id);
+        $historial->delete();
+        return redirect()->route('admin.usuarios.historial', $historial->user_id)->with('success', 'Historial eliminado correctamente');
+    }
 }

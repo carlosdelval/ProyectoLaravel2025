@@ -49,8 +49,6 @@ Route::delete('/citas/{id}', [CitaController::class, 'destroy'])
 Route::middleware(['role:admin'])->prefix('admin/citas')->name('admin.citas.')->group(function () {
     Route::get('/{cita}/editar', [CitaController::class, 'edit'])->name('edit'); // Formulario de edición
     Route::put('/{cita}', [CitaController::class, 'update'])->name('update'); // Actualizar la cita
-    Route::post('admin/citas/{cita}/confirmar', [CitaController::class, 'confirmarCita'])->name('confirmar');
-    Route::post('admin/citas/{cita}/cancelar', [CitaController::class, 'cancelarCita'])->name('cancelar');
 });
 
 Route::middleware(['role:admin'])->group(function () {
@@ -58,11 +56,12 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/usuarios/{user}/editar', [AdminClientesController::class, 'edit'])->name('admin.usuarios.editar');
     Route::get('admin/usuarios/{user}/historial', [AdminClientesController::class, 'historial'])->name('admin.usuarios.historial');
     Route::put('admin/usuarios/{user}/update', [UserController::class, 'update'])->name('admin.usuarios.update');
+    Route::delete('admin/usuarios/{user}/borrar', [UserController::class, 'destroy'])->name('usuario.destroy');
 });
 
 Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/historial', [AdminClientesController::class, 'index'])->name('admin.historial');
-    Route::delete('admin/historial/{historialVista}/borrar', [HistorialVistaController::class, 'delete'])->name('admin.historial.destroy');
+    Route::delete('admin/historial/{historialVista}/borrar', [HistorialVistaController::class, 'destroy'])->name('historial.destroy');
     Route::put('admin/historial/{historialVista}/editar', [HistorialVistaController::class, 'edit'])->name('admin.historial.edit');
 });
 

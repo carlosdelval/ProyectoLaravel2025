@@ -42,7 +42,7 @@ class CitasProgramadas extends Component
 
     public function deleteCita($cita_id)
     {
-        Cita::destroy($cita_id);
+        Cita::find($cita_id)->delete();
     }
 
     public function ordenarFecha()

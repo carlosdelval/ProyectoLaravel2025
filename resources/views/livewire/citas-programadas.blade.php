@@ -7,7 +7,7 @@
                 attributes='{"variationThumbColour":"#536DFE","variationName":"Two Tone","variationNumber":2,"numberOfGroups":2,"backgroundIsGroup":false,"strokeWidth":1,"defaultColours":{"group-1":"#000000","group-2":"#536DFE","background":"#FFFFFF"}}'
                 height="60" width="60"></animated-icons>
             @if (Auth::user()->role == 'user')
-                <h2 class="mt-4 text-2xl font-semibold text-gray-700 ">Tus citas actuales, {{ Auth::user()->name }}
+                <h2 class="mt-4 text-2xl font-semibold text-gray-700">Tus citas actuales, {{ Auth::user()->name }}
                 </h2>
             @elseif (Auth::user()->role == 'admin')
                 <h2 class="mt-4 text-2xl font-semibold text-gray-700">Citas programadas</h2>
@@ -20,7 +20,7 @@
             </div>
         @endif
     </div>
-    <div class="hidden mt-4 overflow-x-auto rounded-lg shadow-md bg-gray-50 md:block">
+    <div class="mt-4 overflow-x-auto rounded-lg shadow-md bg-gray-50 md:block">
         <!-- Versión Escritorio (Tabla) -->
         <div class="hidden overflow-x-auto rounded-lg shadow-md bg-gray-50 md:block">
             <table class="w-full border-collapse min-w-[600px]">
@@ -59,18 +59,21 @@
                             @endif
                             <td class="justify-end px-6 py-4 text-right">
                                 @if (Auth::user()->role == 'user')
-                                    <x-danger-button class="px-4 py-2 text-sm"
-                                        wire:click="deleteCita({{ $cita->id }})"
-                                        wire:confirm="¿Estás seguro de que deseas anular esta cita?">
-                                        <div class="flex items-center gap-2">
-                                            Anular<svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                class="size-4">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
-                                            </svg>
-                                        </div>
-                                    </x-danger-button>
+                                    <form action="{{ route('citas.destroy', $cita->id) }}" method="POST"
+                                        onsubmit="return confirm('¿Seguro que deseas anular esta cita?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-danger-button class="px-4 py-2 text-sm">
+                                            <div class="flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-4">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
+                                                </svg>
+                                            </div>
+                                        </x-danger-button>
+                                    </form>
                                 @else
                                     <div class="flex justify-end gap-2">
                                         <form action="{{ route('admin.citas.edit', $cita->id) }}" method="GET">
@@ -88,18 +91,21 @@
                                                 </div>
                                             </x-primary-button>
                                         </form>
-                                        <x-danger-button class="px-4 py-2 text-sm"
-                                            wire:click="deleteCita({{ $cita->id }})"
-                                            wire:confirm="¿Estás seguro de que deseas anular esta cita?">
-                                            <div class="flex items-center gap-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="size-4">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
-                                                </svg>
-                                            </div>
-                                        </x-danger-button>
+                                        <form action="{{ route('citas.destroy', $cita->id) }}" method="POST"
+                                            onsubmit="return confirm('¿Seguro que deseas anular esta cita?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <x-danger-button class="px-4 py-2 text-sm">
+                                                <div class="flex items-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="size-4">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
+                                                    </svg>
+                                                </div>
+                                            </x-danger-button>
+                                        </form>
                                     </div>
                                 @endif
                             </td>
@@ -115,7 +121,7 @@
         </div>
 
         <!-- Versión Móvil (Acordeón) -->
-        <div class="mt-4 space-y-2 md:hidden" x-data="{ open: null }">
+        <div class="space-y-2 md:hidden" x-data="{ open: null }">
             @forelse($citas as $cita)
                 <div class="overflow-hidden transition-all bg-white border rounded-lg shadow-sm">
                     <button @click="open === {{ $loop->index }} ? open = null : open = {{ $loop->index }}"
@@ -190,18 +196,21 @@
                                             </div>
                                         </x-primary-button>
                                     </form>
-                                    <x-danger-button class="px-4 py-2 text-sm"
-                                        wire:click="deleteCita({{ $cita->id }})"
-                                        wire:confirm="¿Estás seguro de que deseas anular esta cita?">
-                                        <div class="flex items-center gap-2">
-                                            Anular<svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                class="size-4">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
-                                            </svg>
-                                        </div>
-                                    </x-danger-button>
+                                    <form action="{{ route('citas.destroy', $cita->id) }}" method="POST"
+                                        onsubmit="return confirm('¿Seguro que deseas anular esta cita?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-danger-button class="px-4 py-2 text-sm">
+                                            <div class="flex items-center gap-2">
+                                                Anular<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-4">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M15.75 3.75 18 6m0 0 2.25 2.25M18 6l2.25-2.25M18 6l-2.25 2.25m1.5 13.5c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z" />
+                                                </svg>
+                                            </div>
+                                        </x-danger-button>
+                                    </form>
                                 </div>
                             @endif
                         </div>

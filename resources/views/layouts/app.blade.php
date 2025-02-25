@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
     <script src="https://animatedicons.co/scripts/embed-animated-icons.js"></script>
+    @livewireStyles
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -35,6 +36,8 @@
             {{ $slot }}
         </main>
     </div>
+    
+    @livewireScripts
 </body>
 
 </html>
