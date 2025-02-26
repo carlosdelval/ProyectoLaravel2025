@@ -21,10 +21,16 @@
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
-
+        <!-- Background Div with z-index -->
+        <div
+            class="fixed inset-0 min-h-screen w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] z-0">
+            <div
+                class="absolute min-h-screen bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_100%_200px,#d5c5ff,transparent)]">
+            </div>
+        </div>
         <!-- Page Heading -->
         @isset($header)
-            <header class="bg-white shadow dark:bg-gray-800">
+            <header class="relative z-10 bg-white shadow dark:bg-gray-800">
                 <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
@@ -32,11 +38,11 @@
         @endisset
 
         <!-- Page Content -->
-        <main>
+        <main class="relative z-10">
             {{ $slot }}
         </main>
     </div>
-    
+
     @livewireScripts
 </body>
 

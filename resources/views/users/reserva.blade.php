@@ -1,5 +1,6 @@
 <x-app-layout>
-    <div class="max-w-lg p-6 mx-auto mt-10 bg-white shadow-lg rounded-2xl">
+    <!-- Background Div with z-index -->
+    <div class="z-10 max-w-lg p-6 mx-auto mt-10 bg-white shadow-lg rounded-2xl">
         <div class="flex gap-2 mb-2">
             <animated-icons
                 src="https://animatedicons.co/get-icon?name=Schedule&style=minimalistic&token=5be054c1-2954-4c87-9287-f1e6362c8da3"
