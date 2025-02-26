@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Cita;
 use Illuminate\Support\Facades\Auth;
 use App\Models\HistorialVista;
-use App\Notifications\CitaConfirmadaNotification;
 use Carbon\Carbon;
 use App\Models\Optica;
+use App\Models\User;
+use App\Notifications\NuevaCitaReservada;
+use App\Notifications\CitaGraduada;
 use Illuminate\Support\Facades\DB;
 
 class CitaController extends Controller
@@ -49,12 +51,19 @@ class CitaController extends Controller
             return redirect()->route('user.reserva')->with('error', 'Ya existe una cita en esa fecha y hora. Por favor, selecciona otra fecha u hora distinta.');
         } else {
             // Crear la cita
-            Cita::create([
+            $cita = Cita::create([
                 'user_id' => Auth::id(),
                 'fecha' => $request->fecha_reserva,
                 'hora' => $hora,
                 'optica_id' => $request->optica
             ]);
+
+            // Obtener al admin (ajusta esto según tu lógica de usuarios)
+            $admin = User::where('role', 'admin')->first();
+
+            if ($admin) {
+                $admin->notify(new NuevaCitaReservada($cita));
+            }
 
 
             return redirect()->route('dashboard')->with('success', 'Cita reservada con éxito.');
@@ -123,6 +132,9 @@ class CitaController extends Controller
     {
         $cita = Cita::findOrFail($id);
         $cita->update(['graduada' => 1]);
+
+        // Notificar al usuario
+        $cita->user->notify(new CitaGraduada($cita));
 
         // Verificar si el usuario ya está registrado como cliente de la óptica
         $existeRelacion = DB::table('optica_user')

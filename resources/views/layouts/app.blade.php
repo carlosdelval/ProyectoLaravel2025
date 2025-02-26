@@ -20,7 +20,9 @@
 
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        @include('layouts.navigation')
+        <div class="relative z-20">
+            @include('layouts.navigation')
+        </div>
         <!-- Background Div with z-index -->
         <div
             class="fixed inset-0 min-h-screen w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] z-0">

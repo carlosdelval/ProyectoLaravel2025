@@ -1,4 +1,5 @@
-<nav x-data="{ open: false }" class="relative z-10 bg-white border-b border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+<nav x-data="{ open: false }"
+    class="relative z-10 bg-white border-b border-gray-100 dark:bg-gray-800 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -26,7 +27,8 @@
                         </div>
                     </flux:navbar.item>
                     @if (Auth::user()->role == 'user')
-                        <flux:navbar.item :href="route('users.show', ['user' => Auth::user()->id])" class="max-sm:hidden">
+                        <flux:navbar.item :href="route('users.show', ['user' => Auth::user()-> id])"
+                            class="max-sm:hidden">
                             <div class="flex gap-2">
                                 <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -51,7 +53,8 @@
                             </div>
                         </flux:navbar.item>
                     @else
-                        <flux:navbar.item :href="route('admin.clientes')" :current="request()->is('/')" class="max-sm:hidden">
+                        <flux:navbar.item :href="route('admin.clientes')" :current="request()-> is('/')"
+                            class="max-sm:hidden">
                             <div class="flex gap-2">
                                 <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -65,6 +68,64 @@
                     @endif
                 </flux:navbar>
             </div>
+
+            @auth
+                @php
+                    $notificaciones = auth()->user()->unreadNotifications;
+                @endphp
+                @if ($notificaciones->isNotEmpty())
+                    <div class="relative sm:-my-px sm:ms-10 max-sm:hidden sm:flex" x-data="{ open: false }">
+                        <button @click="open = !open" class="relative">
+                            <animated-icons
+                                src="https://animatedicons.co/get-icon?name=notification&style=minimalistic&token=2a8c285f-a7a0-4f4d-b2c3-acccc136c454"
+                                trigger="hover"
+                                attributes='{"variationThumbColour":"#536DFE","variationName":"Two Tone","variationNumber":2,"numberOfGroups":2,"backgroundIsGroup":false,"strokeWidth":1,"defaultColours":{"group-1":"#000000","group-2":"#536DFE","background":"#FFFFFF"}}'
+                                height="30" width="30">
+                            </animated-icons>
+                            <span
+                                class="absolute -top-0 -right-1 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                                {{ $notificaciones->count() }}
+                            </span>
+                        </button>
+
+                        <!-- Dropdown -->
+                        <div x-show="open" @click.away="open = false"
+                            class="absolute left-0 z-20 w-64 mt-2 overflow-hidden bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700">
+                            <div
+                                class="p-2 text-sm font-bold text-gray-800 border-b dark:text-gray-200 dark:border-gray-700">
+                                Notificaciones
+                            </div>
+                            <ul class="overflow-y-auto max-h-60">
+                                @forelse ($notificaciones as $notificacion)
+                                    <li
+                                        class="flex justify-between px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        @if (Auth()->user()->role === 'user')
+                                            <span>{{ $notificacion->data['mensaje'] }}</span>
+                                            <a href="{{ route('users.show', ['user' => Auth::user()->id]) }}"
+                                                class="text-xs text-blue-500">
+                                                Ver
+                                            </a>
+                                        @else
+                                            <span>{{ $notificacion->data['message'] }} para
+                                                {{ $notificacion->data['usuario'] }}
+                                                el día {{ $notificacion->data['fecha'] }}</span>
+                                        @endif
+                                    </li>
+                                @empty
+                                    <li class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                                        No tienes notificaciones.
+                                    </li>
+                                @endforelse
+                            </ul>
+                            <div class="p-2 text-center border-t dark:border-gray-700">
+                                <button wire:click="marcarNotificacionesLeidas" class="text-xs text-blue-500">
+                                    Marcar todas como leídas
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endauth
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -117,19 +178,69 @@
                     {{ __('Mis datos') }}
                 </x-responsive-nav-link>
             </div>
-            <div class=pt-2 pb-3 space-y-11">
+            <div class="pt-2 pb-3 space-y-11">
                 <x-responsive-nav-link :href="route('user.reserva')" :active="request()->routeIs('user.reserva')">
                     {{ __('Reservar cita') }}
                 </x-responsive-nav-link>
             </div>
         @elseif (Auth::user()->role == 'admin')
-            <div class=pt-2 pb-3 space-y-11">
+            <div class="pt-2 pb-3 space-y-11">
                 <x-responsive-nav-link :href="route('admin.clientes')" :active="request()->routeIs('admin.clientes.show')" :active="request()->routeIs('admin.clientes')">
                     {{ __('Listado Clientes') }}
                 </x-responsive-nav-link>
             </div>
         @endif
 
+        <!-- Notificaciones Responsivas -->
+        <div class="px-4 pt-4 border-t border-gray-200 dark:border-gray-600" x-data="{ open: false }">
+            <button @click="open = !open"
+                class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300">
+                <div class="flex items-center gap-2">
+                    <animated-icons
+                        src="https://animatedicons.co/get-icon?name=notification&style=minimalistic&token=2a8c285f-a7a0-4f4d-b2c3-acccc136c454"
+                        trigger="hover"
+                        attributes='{"variationThumbColour":"#536DFE","variationName":"Two Tone","variationNumber":2,"numberOfGroups":2,"backgroundIsGroup":false,"strokeWidth":1,"defaultColours":{"group-1":"#000000","group-2":"#536DFE","background":"#FFFFFF"}}'
+                        height="30" width="30">
+                    </animated-icons>
+                    <span>Notificaciones</span>
+                </div>
+                <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                    {{ $notificaciones->count() }}
+                </span>
+            </button>
+
+            <!-- Dropdown de notificaciones -->
+            <div x-show="open" @click.away="open = false"
+                class="mt-2 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                <ul class="overflow-y-auto text-sm max-h-60">
+                    @forelse ($notificaciones as $notificacion)
+                        <li
+                            class="flex justify-between px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            @if (Auth()->user()->role === 'user')
+                                <span>{{ $notificacion->data['mensaje'] }}</span>
+                                <a href="{{ route('users.show', ['user' => Auth::user()->id]) }}"
+                                    class="text-xs text-blue-500">
+                                    Ver
+                                </a>
+                            @else
+                                <span>{{ $notificacion->data['message'] }} para
+                                    {{ $notificacion->data['usuario'] }}
+                                    el día {{ $notificacion->data['fecha'] }}</span>
+                            @endif
+                        </li>
+                    @empty
+                        <li class="px-4 py-2 text-gray-500 dark:text-gray-400">
+                            No tienes notificaciones.
+                        </li>
+                    @endforelse
+                </ul>
+                <div class="p-2 text-center border-t dark:border-gray-700">
+                    <button wire:click="marcarNotificacionesLeidas" class="text-xs text-blue-500">
+                        Marcar todas como leídas
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
@@ -146,15 +257,15 @@
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-responsive-nav-link :href="route('logout')"
                         onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                                    this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
         </div>
     </div>
+
     @fluxScripts
 </nav>
