@@ -71,7 +71,4 @@ Route::middleware(['role:admin'])->group(function () {
 Route::post('historial/{id}/upload-pdf', [HistorialVistaController::class, 'uploadPdf'])->name('historial.uploadPdf')->middleware(['role:admin']);
 Route::get('/historial/{id}/descargar', [HistorialVistaController::class, 'descargarPDF'])->name('historial.descargar');
 
-
-
-
 require __DIR__ . '/auth.php';
