@@ -118,9 +118,12 @@
                                 @endforelse
                             </ul>
                             <div class="p-2 text-center border-t dark:border-gray-700">
-                                <button wire:click="marcarNotificacionesLeidas" class="text-xs text-blue-500">
-                                    Marcar todas como leídas
-                                </button>
+                                <form method="POST" action="{{ route('notificaciones.leer') }}">
+                                    @csrf
+                                    <button type="submit" class="text-xs text-blue-500">
+                                        Marcar todas como leídas
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -192,6 +195,7 @@
         @endif
 
         <!-- Notificaciones Responsivas -->
+        @if ($notificaciones->isNotEmpty())
         <div class="px-4 pt-4 border-t border-gray-200 dark:border-gray-600" x-data="{ open: false }">
             <button @click="open = !open"
                 class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300">
@@ -218,10 +222,6 @@
                             class="flex justify-between px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                             @if (Auth()->user()->role === 'user')
                                 <span>{{ $notificacion->data['mensaje'] }}</span>
-                                <a href="{{ route('users.show', ['user' => Auth::user()->id]) }}"
-                                    class="text-xs text-blue-500">
-                                    Ver
-                                </a>
                             @else
                                 <span>{{ $notificacion->data['message'] }} para
                                     {{ $notificacion->data['usuario'] }}
@@ -235,12 +235,16 @@
                     @endforelse
                 </ul>
                 <div class="p-2 text-center border-t dark:border-gray-700">
-                    <button wire:click="marcarNotificacionesLeidas" class="text-xs text-blue-500">
-                        Marcar todas como leídas
-                    </button>
+                    <form method="POST" action="{{ route('notificaciones.leer') }}">
+                        @csrf
+                        <button type="submit" class="text-xs text-blue-500">
+                            Marcar todas como leídas
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
+        @endif
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">

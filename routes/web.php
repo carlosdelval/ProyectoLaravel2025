@@ -46,6 +46,9 @@ Route::delete('/citas/{id}', [CitaController::class, 'destroy'])
     ->middleware('auth')
     ->name('citas.destroy');
 
+Route::post('/notificaciones/leidas', [UserController::class, 'marcarNotificacionesLeidas'])->name('notificaciones.leer');
+
+
 Route::middleware(['role:admin'])->prefix('admin/citas')->name('admin.citas.')->group(function () {
     Route::get('/{cita}/editar', [CitaController::class, 'edit'])->name('edit'); // Formulario de edición
     Route::put('/{cita}', [CitaController::class, 'update'])->name('update'); // Actualizar la cita

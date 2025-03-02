@@ -168,3 +168,30 @@
         </form>
     </div>
 </x-app-layout>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const fechaInput = document.getElementById("fecha_reserva");
+        const periodoSelect = document.getElementById("periodo");
+        const horaTardeSelect = document.getElementById("hora_tarde");
+        const opcionTarde = periodoSelect.querySelector("option[value='tarde']");
+
+        fechaInput.addEventListener("input", function() {
+            let fechaSeleccionada = new Date(this.value);
+            let diaSemana = fechaSeleccionada.getDay(); // 6 = Sábado
+
+            if (diaSemana === 0) { // Si es Domingo, limpiar la fecha
+                alert("No puedes seleccionar un domingo. Por favor, elige otro día.");
+                this.value = "";
+            } else if (diaSemana === 6) { // Si es Sábado, deshabilitar "tarde"
+                opcionTarde.disabled = true;
+                if (periodoSelect.value === "tarde") {
+                    periodoSelect.value = ""; // Resetear el select si estaba en "tarde"
+                    horaTardeSelect.style.display = 'none';
+                }
+            } else { // Si no es sábado ni domingo, habilitar "tarde"
+                opcionTarde.disabled = false;
+            }
+        });
+    });
+</script>

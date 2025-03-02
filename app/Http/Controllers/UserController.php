@@ -98,4 +98,11 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('admin.clientes')->with('success', 'Usuario eliminado correctamente');
     }
+
+    // Marcar todas las notificaciones como leídas
+    public function marcarNotificacionesLeidas()
+{
+    Auth::user()->unreadNotifications->markAsRead();
+    return back();
+}
 }
